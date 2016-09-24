@@ -28,7 +28,7 @@ bot.on('message', (payload, reply) => {
 
   let text = payload.message.text ? payload.message.text.replace('?', '!') : 'meh'
 
-  FB.api(payload.sender.id, { fields: ['name', 'picture'] }, (profile) => {
+  FB.api(payload.sender.id, (profile) => {
     if(!profile || profile.error) {
      console.log(!profile ? 'error occurred' : profile.error);
      return;
