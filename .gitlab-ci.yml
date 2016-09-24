@@ -1,9 +1,20 @@
-test:
-  type: deploy
+
+tests:
+  stage: test
   script:
-  # apt-get update -qy
-  # apt-get install -y nodejs
-  - gem install dpl
-  - dpl --provider=heroku --app=test-messenger42 --api-key=$HEROKU_API_KEY
+    - apt-get update -qy
+    - apt-get install -y curl
+    - curl -sL https://deb.nodesource.com/setup_6.x | bash -
+    - apt-get install -y nodejs python build-essential git openssh-client
+    - npm install
+    - npm test
   only:
-  - master
+    - master
+
+deploy:
+  stage: deploy
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=test-messenger42 --api-key=$HEROKU_API_KEY
+  only:
+    - master
