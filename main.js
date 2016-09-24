@@ -34,7 +34,7 @@ bot.on('message', (payload, reply) => {
      return;
     }
 
-    profiel.id2 = payload.sender.id;
+    profile.id2 = payload.sender.id;
 
     console.log(profile);
     reply({ text }, (err) => {
