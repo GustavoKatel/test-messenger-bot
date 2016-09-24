@@ -11,11 +11,11 @@ FB.setAccessToken(config.messenger.token);
 
 
 /**
-* UserController <- EventEmitter
+* UserController
 * Events:
 *   - message -> (string: text): the controller needs to send a message
 */
-class UserController extends EventEmitter {
+class UserController {
 
   constructor(userId) {
     this.userId = userId;
@@ -31,6 +31,8 @@ class UserController extends EventEmitter {
 
     });
 
+    this.evm = new EventEmitter();
+
   }
 
   handle(payload, reply) {
@@ -39,6 +41,10 @@ class UserController extends EventEmitter {
 
     reply({ text });
 
+  }
+
+  on(ev, cb) {
+    this.evm.on(ev, cb);
   }
 
 }
