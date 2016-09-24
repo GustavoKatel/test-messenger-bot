@@ -28,21 +28,20 @@ bot.on('message', (payload, reply) => {
 
   let text = payload.message.text ? payload.message.text.replace('?', '!') : 'meh'
 
-  FB.api(payload.sender.id, (profile) => {
+  FB.api(payload.sender.id, { fields: ['id', 'name', 'profile_pic'] }, (profile) => {
     if(!profile || profile.error) {
      console.log(!profile ? 'error occurred' : profile.error);
      return;
     }
 
+    console.log(profile);
+    console.log(payload.sender);
     reply({ text }, (err) => {
-      if (err) throw err
+      if (err) throw err;
 
-      console.log(profile);
-      console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`)
+      console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`);
     });
 
-    console.log(profile.id);
-    console.log(profile.name);
   });
 })
 
