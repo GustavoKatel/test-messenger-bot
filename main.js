@@ -27,7 +27,7 @@ bot.on('message', (payload, reply) => {
     reply({ text }, (err) => {
       if (err) throw err
 
-      console.log(`Sender id: ${payload.sender.id}`);
+      console.log(`Sender profile: ${profile}`);
       console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`)
     })
   })
