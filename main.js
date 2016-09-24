@@ -1,12 +1,12 @@
 const http = require('http')
 const Bot = require('messenger-bot')
 
-const UserController = require('./userController');
+const config = require('./config');
 
 let bot = new Bot({
-  token: process.env.MESSENGER_TOKEN,
-  verify: process.env.MESSENGER_VERIFY,
-  app_secret: process.env.MESSENGER_APP_KEY
+  token: config.messenger.token,
+  verify: config.messenger.verify,
+  app_secret: config.messenger.secret
 })
 
 bot.on('error', (err) => {
@@ -30,4 +30,3 @@ bot.on('message', (payload, reply) => {
 })
 
 http.createServer(bot.middleware()).listen(process.env.PORT || 3000);
-console.log('Echo bot server running at port 3000.')
