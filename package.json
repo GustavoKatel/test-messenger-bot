@@ -1,0 +1,32 @@
+{
+  "name": "test-messenger-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "node_modules/mocha/bin/mocha --reporter specs tests/*"
+  },
+  "engines": {
+    "node": "6.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/gustavokatel/teste-messenger-bot.git"
+  },
+  "author": "GustavoKatel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/gustavokatel/teste-messenger-bot/issues"
+  },
+  "homepage": "https://gitlab.com/gustavokatel/teste-messenger-bot#README",
+  "dependencies": {
+    "express": "^4.14.0",
+    "messenger-bot": "^2.3.0",
+    "request": "^2.75.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  }
+}
