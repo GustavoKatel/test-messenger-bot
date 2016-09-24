@@ -1,9 +1,9 @@
 
-var chai = require('chai');
+const chai = require('chai');
 
-var assert = chai.assert;
+const assert = chai.assert;
 
-var config = require('../config');
+const config = require('../config');
 
 describe('Configuration module tests', function() {
 

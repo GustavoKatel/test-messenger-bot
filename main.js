@@ -1,5 +1,8 @@
-const http = require('http')
-const Bot = require('messenger-bot')
+'use strict'
+const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
+const Bot = require('messenger-bot');
 
 const config = require('./config');
 
@@ -24,9 +27,26 @@ bot.on('message', (payload, reply) => {
     reply({ text }, (err) => {
       if (err) throw err
 
-      console.log(`Echoed back to ${profile.first_name} ${profile.last_name}: ${text}`)
+      console.log(`Sender id: ${payload.sender.id}`);
+      console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`)
     })
   })
 })
 
-http.createServer(bot.middleware()).listen(process.env.PORT || 3000);
+var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.get('/webhook', (req, res) => {
+  return bot._verify(req, res);
+})
+
+app.post('/webhook', (req, res) => {
+  bot._handleMessage(req.body);
+  res.end(JSON.stringify({status: 'ok'}));
+})
+
+http.createServer(app).listen(process.env.PORT || 3000);
