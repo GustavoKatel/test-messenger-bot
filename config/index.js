@@ -3,14 +3,14 @@ var path = require('path');
 
 var base = {
 
-  debug: process.env.BOT_DEBUG || true,
+  debug: !(process.env.BOT_DEBUG === 'false'),
 
   root_url: '',
 
   messenger: {
     token: process.env.BOT_MESSENGER_TOKEN || '',
     verify: process.env.BOT_MESSENGER_VERIFY || '',
-    secret: process.env.BOT_MESSENGER_APP_KEY || ''
+    secret: process.env.BOT_MESSENGER_APP_SECRET || ''
   }
 
 };
