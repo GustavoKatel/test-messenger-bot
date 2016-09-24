@@ -3,6 +3,7 @@ const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const Bot = require('messenger-bot');
+const FB = require('fb');
 
 const config = require('./config');
 
@@ -10,7 +11,13 @@ let bot = new Bot({
   token: config.messenger.token,
   verify: config.messenger.verify,
   app_secret: config.messenger.secret
-})
+});
+
+FB.options({
+    appId:          config.messenger.app_id,
+    appSecret:      config.messenger.secret
+});
+FB.setAccessToken(config.messenger.token);
 
 bot.on('error', (err) => {
   console.log(err.message)
@@ -21,16 +28,22 @@ bot.on('message', (payload, reply) => {
 
   let text = payload.message.text ? payload.message.text.replace('?', '!') : 'meh'
 
-  bot.getProfile(payload.sender.id, (err, profile) => {
-    if (err) throw err
+  FB.api(payload.sender.id, (profile) => {
+    if(!profile || profile.error) {
+     console.log(!profile ? 'error occurred' : profile.error);
+     return;
+    }
 
     reply({ text }, (err) => {
       if (err) throw err
 
       console.log(profile);
       console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`)
-    })
-  })
+    });
+
+    console.log(profile.id);
+    console.log(profile.name);
+  });
 })
 
 var app = express();
