@@ -7,44 +7,31 @@ const FB = require('fb');
 
 const config = require('./config');
 
+const UserController = require('./controller/UserController');
+
+var users = {};
+
 let bot = new Bot({
   token: config.messenger.token,
   verify: config.messenger.verify,
   app_secret: config.messenger.secret
 });
 
-FB.options({
-    appId:          config.messenger.app_id,
-    appSecret:      config.messenger.secret
-});
-FB.setAccessToken(config.messenger.token);
-
 bot.on('error', (err) => {
   console.log(err.message)
-})
+});
 
 bot.on('message', (payload, reply) => {
-  console.log(payload);
 
-  let text = payload.message.text ? payload.message.text.replace('?', '!') : 'meh'
+  var userId = payload.sender.id;
 
-  FB.api(payload.sender.id, (profile) => {
-    if(!profile || profile.error) {
-     console.log(!profile ? 'error occurred' : profile.error);
-     return;
-    }
+  if(!(userId in users)) {
+    users[userId] = new UserController(userId);
+  }
 
-    profile.id2 = payload.sender.id;
+  users[userId].handle(payload, reply);
 
-    console.log(profile);
-    reply({ text }, (err) => {
-      if (err) throw err;
-
-      console.log(`Echoed back to id: ${profile.id} ${profile.first_name} ${profile.last_name}: ${text}`);
-    });
-
-  });
-})
+});
 
 var app = express();
 
