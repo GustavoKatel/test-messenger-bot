@@ -27,6 +27,10 @@ class UserController {
 
     this.evm = new EventEmitter();
 
+    getProfile().then(res => {
+      this.kb['name'] = res['first_name'];
+    });
+
   }
 
   handle(payload, reply) {
@@ -73,11 +77,26 @@ class UserController {
 
   generateResponse(text) {
 
-    var res = 'Hey you';
+    var res = 'Can\'t understand that right now';
 
-    // tries to find a 'hi' followed by 0 or 2 words
-    if(text.match(/^hi( \w+){0,2}$/)) {
+    // tries to find any 'hi', 'hey' or 'hello' followed by 0 or 2 words
+    if(text.match(/^((?:hi)|(?:hey)|(?:hello))( \w+){0,2}$/)) {
       res = 'Hi ' + ( this.kb['name'] ? this.kb['name'] : '☺️' );
+    }
+
+    // matches:
+    //  * what's my name[?]
+    //  * what is my name[?]
+    //  * say my name[?]
+    //  * my name[?]
+    if(text.match(/(((what(('?s)|( is)))|(say)) )?my name\??/)) {
+
+      if(this.kb['name']) {
+        res = `Your name is ${this.kb['name']}`;
+      } else {
+        res = 'Don\'t know your name yet. Why don\'t you tell me?';
+      }
+
     }
 
     return { text: res };
