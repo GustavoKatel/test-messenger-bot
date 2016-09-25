@@ -27,6 +27,11 @@ bot.on('message', (payload, reply) => {
 
   if(!(userId in users)) {
     users[userId] = new UserController(userId);
+    users[userId].on('message', (recipientId, payload) => {
+
+      bot.sendMessage(recipientId, payload);
+
+    });
   }
 
   users[userId].handle(payload, reply);

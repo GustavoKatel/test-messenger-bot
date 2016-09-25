@@ -14,7 +14,8 @@ FB.setAccessToken(config.messenger.token);
 /**
 * UserController
 * Events:
-*   - message -> (string: text): the controller needs to send a message
+*   - message -> (string: recipient, object: payload)
+        the controller needs to send a message
 */
 class UserController {
 
@@ -34,7 +35,10 @@ class UserController {
 
     if(!text) return; // not yet
 
-    reply({ text });
+    this.extractData(text);
+    var response = this.generateResponse(text);
+
+    reply(response);
 
   }
 
@@ -48,7 +52,6 @@ class UserController {
 
       if(!this.profile) {
 
-        // console.log(FB.api(this.userId));
         FB.api(this.userId).then(resolve).catch(reject);
 
       } else {
@@ -56,6 +59,28 @@ class UserController {
       }
 
     });
+
+  }
+
+  extractData(text) {
+
+    var groups = (/my name is (\w+)/).exec(text);
+    if(groups.length > 1) {
+      this.kb['name'] = groups[1];
+    }
+
+  }
+
+  generateResponse(text) {
+
+    var res = 'Hey you';
+
+    // tries to find a 'hi' followed by 0 or 2 words
+    if(text.match(/^hi( \w+){0,2}$/)) {
+      res = 'Hi ' + ( this.kb['name'] ? this.kb['name'] : '☺️' );
+    }
+
+    return { text: res };
 
   }
 
