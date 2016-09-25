@@ -5,7 +5,8 @@ const config = require('../config');
 
 FB.options({
     appId:          config.messenger.app_id,
-    appSecret:      config.messenger.secret
+    appSecret:      config.messenger.secret,
+    Promise: Promise
 });
 FB.setAccessToken(config.messenger.token);
 
@@ -19,17 +20,9 @@ class UserController {
 
   constructor(userId) {
     this.userId = userId;
-    this.profile = {};
+    this.profile = null;
 
-    FB.api(userId, (res) => {
-      if(!res || res.error) {
-       console.log(!res ? 'error occurred' : res.error);
-       return;
-      }
-
-      this.profile = res;
-
-    });
+    this.kb = {};
 
     this.evm = new EventEmitter();
 
@@ -37,7 +30,9 @@ class UserController {
 
   handle(payload, reply) {
 
-    let text = payload.message.text ? payload.message.text.replace('?', '!') : 'meh'
+    let text = payload.message.text;
+
+    if(!text) return; // not yet
 
     reply({ text });
 
@@ -45,6 +40,23 @@ class UserController {
 
   on(ev, cb) {
     this.evm.on(ev, cb);
+  }
+
+  getProfile() {
+
+    return new Promise((resolve, reject) => {
+
+      if(!this.profile) {
+
+        // console.log(FB.api(this.userId));
+        FB.api(this.userId).then(resolve).catch(reject);
+
+      } else {
+        resolve(this.profile);
+      }
+
+    });
+
   }
 
 }
