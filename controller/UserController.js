@@ -65,7 +65,7 @@ class UserController {
   extractData(text) {
 
     var groups = (/my name is (\w+)/).exec(text);
-    if(groups.length > 1) {
+    if(groups && groups.length > 1) {
       this.kb['name'] = groups[1];
     }
 
