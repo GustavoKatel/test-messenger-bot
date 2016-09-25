@@ -27,7 +27,7 @@ class UserController {
 
     this.evm = new EventEmitter();
 
-    getProfile().then(res => {
+    this.getProfile().then(res => {
       this.kb['name'] = res['first_name'];
     });
 
