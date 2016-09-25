@@ -1,5 +1,8 @@
 
 const chai = require('chai');
+const chaiAsPromised = require("chai-as-promised");
+
+chai.use(chaiAsPromised);
 
 const assert = chai.assert;
 
@@ -10,7 +13,6 @@ const UserController = require('../controller/UserController');
 var testUserId = '100001805095914';
 
 describe('UserController tests', function() {
-
 
   it('getProfile() promise should resolve, eventually, an object', function() {
 
