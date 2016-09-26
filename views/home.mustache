@@ -14,12 +14,18 @@
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "http://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId={{ app_id }}";
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId={{ app_id }}";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 
 
     <div id="fbmessagebox">
+      <div class="fb-messengermessageus"
+        messenger_app_id="{{ app_id }}"
+        page_id="{{ page_id }}"
+        color="blue"
+        size="standard" >
+      </div>
       <div class="fb-page" data-href="https://www.facebook.com/{{ page_id }}/" data-tabs="messages" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/{{ page_id }}/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/{{ page_id }}/">Simple Bot - Botanado</a></blockquote></div>
     </div>
 
