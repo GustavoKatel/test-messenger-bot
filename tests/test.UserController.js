@@ -80,6 +80,50 @@ describe('UserController tests', function() {
 
     });
 
+    describe('Knowledgebase extraction', function() {
+
+      it('Should extract the user name', function() {
+
+        var uc = new UserController(testUserId);
+        uc.handle({
+          message: {
+            text: 'My name is test'
+          }
+        }, (res) => {
+
+          assert.property(uc.kb, 'name');
+          assert.equal(uc.kb['name'], 'test');
+
+        });
+
+      });
+
+      it('Should respond the user name if asked', function() {
+
+        var uc = new UserController(testUserId);
+        uc.handle({
+          message: {
+            text: 'My name is test'
+          }
+        }, (res) => {
+
+          uc.handle({
+            message: {
+              text: 'What is my name?'
+            }
+          }, (res) => {
+
+            assert.property(res, 'text');
+            assert.include(res['text'], 'test');
+
+          });
+
+
+        });
+
+      });
+
+    });
 
   });
 

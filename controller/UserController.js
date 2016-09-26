@@ -42,7 +42,9 @@ class UserController {
     this.extractData(text);
     var response = this.generateResponse(text);
 
-    reply(response);
+    if(reply) {
+      reply(response);
+    }
 
   }
 
@@ -68,7 +70,7 @@ class UserController {
 
   extractData(text) {
 
-    var groups = (/my name is (\w+)/).exec(text);
+    var groups = (/my name is (\w+)/i).exec(text);
     if(groups && groups.length > 1) {
       this.kb['name'] = groups[1];
     }
@@ -80,7 +82,7 @@ class UserController {
     var res = 'Can\'t understand that right now';
 
     // tries to find any 'hi', 'hey' or 'hello' followed by 0 or 2 words
-    if(text.match(/^((?:hi)|(?:hey)|(?:hello))( \w+){0,2}$/)) {
+    if(text.match(/^((?:hi)|(?:hey)|(?:hello))( \w+){0,2}$/i)) {
       res = 'Hi ' + ( this.kb['name'] ? this.kb['name'] : '☺️' );
     }
 
@@ -89,7 +91,7 @@ class UserController {
     //  * what is my name[?]
     //  * say my name[?]
     //  * my name[?]
-    if(text.match(/(((what(('?s)|( is)))|(say)) )?my name\??/)) {
+    if(text.match(/(((what(('?s)|( is)))|(say)) )?my name\??/i)) {
 
       if(this.kb['name']) {
         res = `Your name is ${this.kb['name']}`;
