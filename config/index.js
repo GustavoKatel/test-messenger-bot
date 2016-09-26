@@ -11,7 +11,8 @@ var base = {
     token: process.env.BOT_MESSENGER_TOKEN || '',
     verify: process.env.BOT_MESSENGER_VERIFY || '',
     app_id: process.env.BOT_MESSENGER_APP_ID || '',
-    secret: process.env.BOT_MESSENGER_APP_SECRET || ''
+    secret: process.env.BOT_MESSENGER_APP_SECRET || '',
+    page_id: process.env.BOT_MESSENGER_PAGE_ID || ''
   }
 
 };

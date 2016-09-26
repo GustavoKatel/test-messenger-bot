@@ -64,7 +64,7 @@ describe('Configuration module tests', function() {
     });
 
     // app id
-    it('Should contain a app id string', function() {
+    it('Should contain an app id string', function() {
 
       assert.typeOf(config.messenger.app_id, 'string');
 
@@ -73,6 +73,19 @@ describe('Configuration module tests', function() {
     it('App ID should not be empty', function() {
 
       assert.notEqual(config.messenger.app_id, '');
+
+    });
+
+    // page id
+    it('Should contain a page id string', function() {
+
+      assert.typeOf(config.messenger.page_id, 'string');
+
+    });
+
+    it('Page ID should not be empty', function() {
+
+      assert.notEqual(config.messenger.page_id, '');
 
     });
 
