@@ -62,6 +62,8 @@ app.post('/webhook', (req, res) => {
   res.end(JSON.stringify({status: 'ok'}));
 })
 
+app.use('/static', express.static('public'));
+
 app.get(/\/*/, (req, res) => {
 
   res.render(
