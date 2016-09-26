@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Bot = require('messenger-bot');
 const FB = require('fb');
+const mustacheExpress = require('mustache-express');
 
 const config = require('./config');
 
@@ -40,6 +41,13 @@ bot.on('message', (payload, reply) => {
 
 var app = express();
 
+// use mustache templates
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+
+// register views
+app.set('views', __dirname + '/views');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -53,5 +61,17 @@ app.post('/webhook', (req, res) => {
   bot._handleMessage(req.body);
   res.end(JSON.stringify({status: 'ok'}));
 })
+
+app.get(/\/*/, (req, res) => {
+
+  res.render(
+    'home.mustache',
+    {
+      app_id: config.messenger.app_id,
+      page_id: config.messenger.page_id
+    }
+  );
+
+});
 
 http.createServer(app).listen(process.env.PORT || 3000);
