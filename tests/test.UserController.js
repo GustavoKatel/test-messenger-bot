@@ -142,8 +142,6 @@ describe('UserController tests', function() {
           }
         }, (res) => {
 
-          console.log(res);
-
           assert.property(res, 'text');
           assert.include(res['text'], 'Gustavo Sampaio');
           done();
