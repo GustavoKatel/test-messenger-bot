@@ -27,12 +27,9 @@ class UserController {
 
     this.evm = new EventEmitter();
 
-    this.getProfile().then(res => {
-      this.kb['name'] = res['first_name'];
-    });
-
   }
 
+  /** handle user inputs */
   handle(payload, reply) {
 
     let text = payload.message.text;
@@ -40,18 +37,25 @@ class UserController {
     if(!text) return; // not yet
 
     this.extractData(text);
-    var response = this.generateResponse(text);
+    this.generateResponse(text).then((response) => {
 
-    if(reply) {
-      reply(response);
-    }
+      if(reply) {
+        reply(response);
+      }
+
+    }).catch(console.log);
 
   }
 
+  /** wrapper to the EventEmmiter */
   on(ev, cb) {
     this.evm.on(ev, cb);
   }
 
+  /**
+  * Resolves the user profile from facebook
+  * @returns {Promise}
+  */
   getProfile() {
 
     return new Promise((resolve, reject) => {
@@ -68,6 +72,10 @@ class UserController {
 
   }
 
+  /**
+  * Extract data from the user texts
+  * @param {String} text
+  */
   extractData(text) {
 
     var groups = (/my name is (\w+)/i).exec(text);
@@ -77,43 +85,52 @@ class UserController {
 
   }
 
+  /**
+  * Generate response from the user input
+  * @param {String} text
+  * @returns {Promise}
+  */
   generateResponse(text) {
 
-    var res = 'Can\'t understand that right now';
+    return new Promise((resolve, reject) => {
 
-    // tries to find any 'hi', 'hey' or 'hello' followed by 0 or 2 words
-    if(text.match(/^((?:hi)|(?:hey)|(?:hello))( \w+){0,2}$/i)) {
-      res = 'Hi ' + ( this.kb['name'] ? this.kb['name'] : '☺️' );
-    }
-
-    // matches:
-    //  * what's my name[?]
-    //  * what is my name[?]
-    //  * say my name[?]
-    //  * my name[?]
-    if(text.match(/(((what(('?s)|( is)))|(say)) )?my name\??/i)) {
-
-      if(this.kb['name']) {
-        res = `Your name is ${this.kb['name']}`;
-      } else {
-        res = 'Don\'t know your name yet. Why don\'t you tell me?';
+      // tries to find any 'hi', 'hey' or 'hello' followed by 0 or 2 words
+      if(text.match(/^((?:hi)|(?:hey)|(?:hello))( \w+){0,2}$/i)) {
+        resolve({ text: 'Hi ' + ( this.kb['name'] ? this.kb['name'] : '☺️' )});
+        return;
       }
 
-    }
+      // matches:
+      //  * what's my name[?]
+      //  * what is my name[?]
+      //  * say my name[?]
+      //  * my name[?]
+      //  * who am i[?]
+      if(
+          text.match(/(((what(('?s)|( is)))|(say)) )?my name\??/i) ||
+          text.match(/who am i\??/i)
+      ) {
 
-    // matches:
-    //  * who am i[?]
-    if(text.match(/who am i\??/i)) {
+        if(this.kb['name']) {
+          resolve({ text: `Your name is ${this.kb['name']}` });
+        } else {
 
-      if(this.kb['name']) {
-        res = `You are ${this.kb['name']}`;
-      } else {
-        res = 'Don\'t know your name yet. Why don\'t you tell me?';
+          this.getProfile().then((profile) => {
+            this.kb['name'] = profile['last_name'];
+            res = `Your name is ${this.kb['name']}`;
+          }).catch(reject);
+
+        }
+
+        return;
+
       }
 
-    }
+      // default answer
+      var res = 'Can\'t understand that right now';
+      resolve({ text: res });
 
-    return { text: res };
+    });
 
   }
 
