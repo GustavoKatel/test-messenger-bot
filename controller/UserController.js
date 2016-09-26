@@ -28,7 +28,11 @@ class UserController {
 
   }
 
-  /** handle user inputs */
+  /**
+  * handle user inputs
+  * @param {Facebook message payload} payload
+  * @param {Function(Facebook message object)} reply
+  */
   handle(payload, reply) {
 
     let text = payload.message.text;
@@ -124,9 +128,9 @@ class UserController {
         } else {
 
           this.getProfile().then((profile) => {
-            this.kb['name'] = profile['last_name'];
+            this.kb['name'] = profile['name'];
             res = `Your name is ${this.kb['name']}`;
-            resolve(res);
+            resolve({ text: res});
           }).catch(reject);
 
         }
