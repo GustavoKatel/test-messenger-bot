@@ -5,8 +5,7 @@ const config = require('../config');
 
 FB.options({
     appId:          config.messenger.app_id,
-    appSecret:      config.messenger.secret,
-    Promise: Promise
+    appSecret:      config.messenger.secret
 });
 FB.setAccessToken(config.messenger.token);
 
@@ -62,7 +61,15 @@ class UserController {
 
       if(!this.profile) {
 
-        FB.api(this.userId).then(resolve).catch(reject);
+        FB.api(this.userId, (res) => {
+          if(!res || res.error) {
+           reject(!res ? 'error occurred' : res.error);
+           return;
+          }
+
+          resolve(res);
+
+        });
 
       } else {
         resolve(this.profile);
