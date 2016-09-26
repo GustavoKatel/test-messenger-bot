@@ -101,6 +101,18 @@ class UserController {
 
     }
 
+    // matches:
+    //  * who am i[?]
+    if(text.match(/who am i\??/i)) {
+
+      if(this.kb['name']) {
+        res = `You are ${this.kb['name']}`;
+      } else {
+        res = 'Don\'t know your name yet. Why don\'t you tell me?';
+      }
+
+    }
+
     return { text: res };
 
   }
