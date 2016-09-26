@@ -67,6 +67,7 @@ class UserController {
            return;
           }
 
+          this.profile = res;
           resolve(res);
 
         });
@@ -125,6 +126,7 @@ class UserController {
           this.getProfile().then((profile) => {
             this.kb['name'] = profile['last_name'];
             res = `Your name is ${this.kb['name']}`;
+            resolve(res);
           }).catch(reject);
 
         }
