@@ -128,9 +128,7 @@ class UserController {
         } else {
 
           this.getProfile().then((profile) => {
-            console.log(profile);
-            this.kb['name'] = profile['name'];
-            console.log(this.kb);
+            this.kb['name'] = profile['name'] || profile['first_name'];
             res = `Your name is ${this.kb['name']}`;
             resolve({ text: res});
           }).catch(reject);
