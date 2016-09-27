@@ -128,6 +128,7 @@ class UserController {
         } else {
 
           this.getProfile().then((profile) => {
+            console.log(profile);
             this.kb['name'] = profile['name'];
             console.log(this.kb);
             res = `Your name is ${this.kb['name']}`;
