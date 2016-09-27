@@ -39,7 +39,7 @@ class UserController {
 
     if(!text) return; // not yet
 
-    if(payload && payload.sender && payload.sender.id) {
+    if(payload.sender && payload.sender.id) {
       console.log(`Received msg from ${payload.sender.id}: ${text}`);
     }
 
