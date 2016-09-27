@@ -39,7 +39,9 @@ class UserController {
 
     if(!text) return; // not yet
 
-    console.log(`Received msg from ${payload.sender.id}: ${text}`);
+    if(payload && payload.sender && payload.sender.id) {
+      console.log(`Received msg from ${payload.sender.id}: ${text}`);
+    }
 
     this.extractData(text);
     this.generateResponse(text).then((response) => {
